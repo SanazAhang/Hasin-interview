@@ -1,7 +1,6 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlinAndroidKsp)
     alias(libs.plugins.hiltAndroid)
 
@@ -37,6 +36,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    composeOptions{
+        kotlinCompilerExtensionVersion="1.5.9"
+    }
     buildFeatures {
         compose = true
     }
@@ -64,6 +66,4 @@ dependencies {
     implementation(libs.hilt.android)
     ksp(libs.hilt.compiler)
 
-    // ViewMode
-    implementation(libs.androidx.lifecycle.viewmodel.ktx)
 }

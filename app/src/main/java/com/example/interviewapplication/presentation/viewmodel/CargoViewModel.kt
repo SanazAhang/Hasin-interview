@@ -21,6 +21,8 @@ class CargoViewModel @Inject constructor(
     val cargoList: State<List<Cargo>> = _cargoList
     private val _detail: MutableState<DetailBottomSheet> = mutableStateOf(DetailBottomSheet())
     val detail: State<DetailBottomSheet> = _detail
+    private val _selectedCargoId: MutableState<Int?> = mutableStateOf(null)
+    val selectedCargoId: State<Int?> = _selectedCargoId
 
     init {
         viewModelScope.launch {
@@ -31,11 +33,31 @@ class CargoViewModel @Inject constructor(
         _detail.value= DetailBottomSheet(true,cargo)
     }
 
-    fun acceptCargo(){
-        // TODO Update cargo list
+    fun acceptCargo(cargoId:Int){
+
+        val updatedCargos = _cargoList.value.map { cargo ->
+            if (cargo.id == cargoId) {
+                _selectedCargoId.value = cargoId
+                cargo.copy(isAccepted = true)
+            } else {
+                cargo.copy(isAccepted = false)
+            }
+        }
+        dismissBottomSheet()
+        _cargoList.value = updatedCargos
     }
     fun dismissBottomSheet(){
         _detail.value= DetailBottomSheet(false)
+    }
+
+    fun onCancelCargo(cargoId: Int) {
+        val updatedCargos = _cargoList.value.map { cargo ->
+            if (cargo.id == cargoId) {
+                _selectedCargoId.value = null
+                cargo.copy(isAccepted = false)
+            } else cargo
+        }
+        _cargoList.value = updatedCargos
     }
 
 }

@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">Interview Application</string>
+    <string name="cancel_cargo">لغو بار</string>
+    <string name="cargoes">لیست بارها</string>
+    <string name="toman">%1$s تومان</string>
+    <string name="download_date">تاریخ بارگیری:</string>
+    <string name="packaging">بسته بندی:</string>
+    <string name="cargo">بار:</string>
+    <string name="weight">وزن:</string>
+    <string name="destination">مقصد:</string>
+    <string name="origin">مبدا:</string>
+    <string name="cargo_detail">جرییات بار</string>
 </resources>

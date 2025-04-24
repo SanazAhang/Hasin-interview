@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModel
 import com.example.interviewapplication.domain.model.Cargo
 import com.example.interviewapplication.presentation.screen.CargoDetailBottomSheet
 import com.example.interviewapplication.presentation.screen.CargoListScreen
@@ -33,23 +34,28 @@ class MainActivity : ComponentActivity() {
         setContent {
             val cargoList = viewModel.cargoList.value
             val detailBottomSheet = viewModel.detail
+            val selectedCargoId = viewModel.selectedCargoId
             InterviewApplicationTheme {
 
                 CargoListScreen(
-                    cargoList
-                ) {
-                    viewModel.onItemClick(it)
-                }
+                   cargo =  cargoList,
+                    onCargoClick = {
+                        viewModel.onItemClick(it)
+                    }, onCancel = {cargoId->
+                        viewModel.onCancelCargo(cargoId)
+                    }, selectedCargo = selectedCargoId.value
+                )
 
                 if (detailBottomSheet.value.isVisible){
                     Log.d("TAG", "onCreate: ${detailBottomSheet.value.selectedCargo}")
                     CargoDetailBottomSheet(
-                        onVerifyOtpButtonClicked = {
-                        viewModel.acceptCargo()
+                        onVerifyOtpButtonClicked = {cargoId->
+                        viewModel.acceptCargo(cargoId)
                     }, onDismiss = {
                         viewModel.dismissBottomSheet()
                     },
-                        cargo = detailBottomSheet.value.selectedCargo,)
+                        cargo = detailBottomSheet.value.selectedCargo,
+                        selectedCargoId = selectedCargoId.value)
                 }
             }
 

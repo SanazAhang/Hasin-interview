@@ -35,12 +35,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalLayoutDirection
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.SecureFlagPolicy
+import com.example.interviewapplication.R
 import com.example.interviewapplication.domain.model.Cargo
 import com.example.interviewapplication.ui.theme.InterviewApplicationTheme
 
@@ -49,8 +51,9 @@ import com.example.interviewapplication.ui.theme.InterviewApplicationTheme
 @Composable
 fun CargoDetailBottomSheet(
     cargo: Cargo,
-    onVerifyOtpButtonClicked: () -> Unit = {},
+    onVerifyOtpButtonClicked: (cargoId:Int) -> Unit = {},
     onDismiss: () -> Unit = {},
+    selectedCargoId:Int?
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true,
@@ -69,8 +72,9 @@ fun CargoDetailBottomSheet(
         content = {
             BottomSheet(
                 cargo = cargo,
-                buttonConfirmClick = onVerifyOtpButtonClicked,
-                onDismiss = onDismiss
+                buttonConfirmClick = { onVerifyOtpButtonClicked(cargo.id ) },
+                onDismiss = onDismiss,
+                selectedCargoId = selectedCargoId
             )
         }
     )
@@ -80,7 +84,8 @@ fun CargoDetailBottomSheet(
 fun BottomSheet(
     cargo: Cargo,
     onDismiss: () -> Unit,
-    buttonConfirmClick: () -> Unit
+    buttonConfirmClick: () -> Unit,
+    selectedCargoId:Int?
 ) {
     Log.d("TAG", "BottomSheet: $cargo")
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
@@ -95,7 +100,7 @@ fun BottomSheet(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "جرییات بار",
+                    text = stringResource(R.string.cargo_detail),
                     fontSize = 18.sp
                 )
                 Icon(
@@ -122,7 +127,7 @@ fun BottomSheet(
                         .padding(8.dp)
                 ) {
                     Text(
-                        text = "مبدا:",
+                        text = stringResource(R.string.origin),
                         fontSize = 14.sp
                     )
                     Text(
@@ -140,7 +145,7 @@ fun BottomSheet(
                         .padding(8.dp)
                 ) {
                     Text(
-                        text = "مقصد:",
+                        text = stringResource(R.string.destination),
                         fontSize = 14.sp
                     )
                     Text(
@@ -159,7 +164,7 @@ fun BottomSheet(
                         .padding(8.dp)
                 ) {
                     Text(
-                        text = "وزن:",
+                        text = stringResource(R.string.weight),
                         fontSize = 14.sp,
                     )
                     Text(
@@ -178,7 +183,7 @@ fun BottomSheet(
                         .padding(8.dp)
                 ) {
                     Text(
-                        text = "بار:",
+                        text = stringResource(R.string.cargo),
                         fontSize = 14.sp
                     )
                     Text(
@@ -196,7 +201,7 @@ fun BottomSheet(
                         .padding(8.dp)
                 ) {
                     Text(
-                        text = "بسته بندی:",
+                        text = stringResource(R.string.packaging),
                         fontSize = 14.sp
                     )
                     Text(
@@ -215,7 +220,7 @@ fun BottomSheet(
                         .padding(8.dp)
                 ) {
                     Text(
-                        text = "تاریخ بارگیری:",
+                        text = stringResource(R.string.download_date),
                         fontSize = 14.sp
                     )
                     Text(
@@ -225,13 +230,15 @@ fun BottomSheet(
 
                     )
                 }
+                if (selectedCargoId == null)
                 Button(
                     onClick = buttonConfirmClick,
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFFF9800)), // نارنجی
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 16.dp)
-                        .height(56.dp),
+                        .height(56.dp)
+                        ,
                     shape = RoundedCornerShape(6.dp)
                 ) {
                     Text(
@@ -251,7 +258,8 @@ fun PreviewBottomSheet() {
         BottomSheet(
             Cargo(3, "مشهد", "کرج", "3 تن", "6 میلیون", "یخچال", "کارتن", "۱۴۰۳/۲/۱۲"),
             onDismiss = {},
-            buttonConfirmClick = {})
+            buttonConfirmClick = {},
+            selectedCargoId = null)
     }
 
 }

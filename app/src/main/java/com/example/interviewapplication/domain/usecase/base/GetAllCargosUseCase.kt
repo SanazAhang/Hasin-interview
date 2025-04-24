@@ -4,7 +4,7 @@ import com.example.interviewapplication.domain.model.Cargo
 import com.example.interviewapplication.domain.repository.CargoRepository
 import javax.inject.Inject
 
-class GetAllCargosUseCase @Inject constructor(
+open class GetAllCargosUseCase @Inject constructor(
     private val repository: CargoRepository
 ) : BaseUseCase<Unit, List<Cargo>> {
 

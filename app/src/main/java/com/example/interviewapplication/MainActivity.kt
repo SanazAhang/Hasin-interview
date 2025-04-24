@@ -6,20 +6,13 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.ViewModel
-import com.example.interviewapplication.domain.model.Cargo
 import com.example.interviewapplication.presentation.screen.CargoDetailBottomSheet
 import com.example.interviewapplication.presentation.screen.CargoListScreen
 import com.example.interviewapplication.presentation.viewmodel.CargoViewModel
-import com.example.interviewapplication.presentation.viewmodel.DetailBottomSheet
 import com.example.interviewapplication.ui.theme.InterviewApplicationTheme
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -35,27 +28,29 @@ class MainActivity : ComponentActivity() {
             val cargoList = viewModel.cargoList.value
             val detailBottomSheet = viewModel.detail
             val selectedCargoId = viewModel.selectedCargoId
+            viewModel.getCargos()
             InterviewApplicationTheme {
 
                 CargoListScreen(
-                   cargo =  cargoList,
+                    cargo = cargoList,
                     onCargoClick = {
                         viewModel.onItemClick(it)
-                    }, onCancel = {cargoId->
+                    }, onCancel = { cargoId ->
                         viewModel.onCancelCargo(cargoId)
                     }, selectedCargo = selectedCargoId.value
                 )
 
-                if (detailBottomSheet.value.isVisible){
+                if (detailBottomSheet.value.isVisible) {
                     Log.d("TAG", "onCreate: ${detailBottomSheet.value.selectedCargo}")
                     CargoDetailBottomSheet(
-                        onVerifyOtpButtonClicked = {cargoId->
-                        viewModel.acceptCargo(cargoId)
-                    }, onDismiss = {
-                        viewModel.dismissBottomSheet()
-                    },
+                        onVerifyOtpButtonClicked = { cargoId ->
+                            viewModel.acceptCargo(cargoId)
+                        }, onDismiss = {
+                            viewModel.dismissBottomSheet()
+                        },
                         cargo = detailBottomSheet.value.selectedCargo,
-                        selectedCargoId = selectedCargoId.value)
+                        selectedCargoId = selectedCargoId.value
+                    )
                 }
             }
 
